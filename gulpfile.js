@@ -1,17 +1,19 @@
 // npm i --save-dev *plugin*
+let isLiteBuild = isWP = false, load = {};
 
 
 // Basic settings:
-const isLiteBuild = true
-const load = {
-	// service: true,
-	// libs: true,
-	// media: true,
-}
+let scriptsPrefix = 'website.'
+
+isWP = true
+// isLiteBuild = true
+// load.service = true
+// load.libs = true
+// load.media = true
 
 /////////////////////////////////////////////////////////////////
 
-const {src, dest} = require('gulp'),
+const { src, dest } = require('gulp'),
 	gulp = require('gulp'),
 	fs = require('fs'),
 	streamqueue = require('streamqueue'),
@@ -34,9 +36,9 @@ const {src, dest} = require('gulp'),
 
 /////////////////////////////////////////////////////////////////
 
-const $source = '#src';
-const $baseDir = {
-	html: $source + '/html/',
+let $source = '#src';
+let $baseDir = {
+	html: $source + '/',
 	css: $source + '/css/',
 	js: $source + '/js/',
 	data: $source + '/data/',
@@ -46,9 +48,9 @@ const $baseDir = {
 	img: $source + '/media/img/',
 	fonts: $source + '/fonts/',
 }
-const $project = isLiteBuild ? 'dist_light_build' : 'dist';
-const path = {
-	clean: ['./dist_light_build/', './dist/'],
+let $project = isWP ? 'assets' : 'dist';
+let path = {
+	clean: ['./dist/', './assets/'],
 	watch: {
 		html: $source + '/**/*.html',
 		css: $baseDir.css + '**/*.scss',
@@ -63,7 +65,7 @@ const path = {
 	src: {
 		html: [$baseDir.html + '**/*.html', '!' + $baseDir.html + '**/[_#]*.html'],
 		css: $baseDir.css + '*style.scss',
-		js: $baseDir.js + '*script.js',
+		js: $baseDir.js + '*.js',
 		data: $baseDir.data + '**/*',
 		service: [$baseDir.service + '**/*', $baseDir.service + '.htaccess'],
 		libs: $baseDir.libs + '**/*',
@@ -93,7 +95,7 @@ function cb() {}
 
 function getExtendedDir(name, dir) {
 	dir = dir.replace($baseDir[name], '');
-	let arr = dir.split('/').slice(0,-1);
+	let arr = dir.split('/').slice(0, -1);
 	dir = arr.join('/') + '/';
 	return dir;
 }
@@ -112,7 +114,10 @@ function html(cb, file) {
 	}
 	return src(filepath)
 		.pipe(fileinclude({
-			indent: true
+			indent: true,
+			context: {
+				light: isLiteBuild
+			}
 		}))
 		.pipe(dest(path.build.root + extDir))
 		.pipe(browsersync.stream());
@@ -127,7 +132,10 @@ function css() {
 			overrideBrowserslist: ['last 5 versions'],
 			cascade: true
 		}))
-		.pipe(css_media_queries());
+		.pipe(css_media_queries())
+		.pipe(rename({
+			prefix: scriptsPrefix
+		}));
 
 	if (!isLiteBuild)
 		stream = stream
@@ -144,7 +152,10 @@ function css() {
 
 function js() {
 	let stream = src(path.src.js)
-		.pipe(fileinclude());
+		.pipe(fileinclude())
+		.pipe(rename({
+			prefix: scriptsPrefix
+		}));
 
 	if (!isLiteBuild)
 		stream = stream
@@ -198,7 +209,7 @@ function media(cb, file) {
 
 /////////////////////////////////////////////////////////////////
 
-const faviconSizes = {L: 270, M: 180, S: 32}
+const faviconSizes = { L: 270, M: 180, S: 32 }
 
 function scaleFavicon(file, size) {
 	file = file.clone();
@@ -244,7 +255,7 @@ function scaleImage2x(file, _, cb) {
 	})
 }
 function renameImage2x(file, _, cb) {
-	let fileName = file.basename.replace('@2x.','.')
+	let fileName = file.basename.replace('@2x.', '.')
 	cb(null, fileName)
 }
 
@@ -261,7 +272,7 @@ function images(cb, filepath) {
 				.pipe(imageresize(renameFaviconS));
 		else
 			return streamqueue(
-				{objectMode: true},
+				{ objectMode: true },
 				src(filepath)
 					.pipe(through.obj(scaleFaviconL))
 					.pipe(imageresize(renameFaviconL)),
@@ -298,7 +309,7 @@ function images(cb, filepath) {
 	// если все файлы
 	else {
 		stream = streamqueue(
-			{objectMode: true},
+			{ objectMode: true },
 			src(images2x)
 				.pipe(through.obj(scaleImage2x))
 				.pipe(imageresize(renameImage2x)),
@@ -311,8 +322,8 @@ function images(cb, filepath) {
 	if (!isLiteBuild)
 		stream = stream
 			.pipe(imagemin([
-				imagemin.mozjpeg({quality: 80, progressive: true}),
-				imagemin.optipng({optimizationLevel: 5})
+				imagemin.mozjpeg({ quality: 80, progressive: true }),
+				imagemin.optipng({ optimizationLevel: 5 })
 			]));
 	// если все файлы, добавляем $
 	if (!filepath) stream = stream.pipe(src(uncompressed));
@@ -327,7 +338,7 @@ function fonts(cb, filepath = path.src.fonts_ttf) {
 	let stream;
 	if (!isLiteBuild)
 		stream = streamqueue(
-			{objectMode: true},
+			{ objectMode: true },
 			src(filepath)
 				.pipe(ttf2woff({
 					clone: true
@@ -382,16 +393,16 @@ function browserSyncInit() {
 			port: 3000,
 			notify: false
 		})
-	},2000)
+	}, 2000)
 }
 
 function watchFiles() {
-	function fixPath(path) {return path.replace(/\\/g, "/")}
+	function fixPath(path) { return path.replace(/\\/g, "/") }
 	function conditionalWatch(item, f) {
-		item.on('change', function(path, stats) {
+		item.on('change', function (path, stats) {
 			f(undefined, fixPath(path));
 		});
-		item.on('add', function(path, stats) {
+		item.on('add', function (path, stats) {
 			f(undefined, fixPath(path));
 		});
 	}
