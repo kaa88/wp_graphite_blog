@@ -1,0 +1,75 @@
+@use "sass:math";
+@import "_reset";
+@import "_noscript";
+@import "_mixins";
+@import "_icons";
+
+
+// Fonts
+// gotham 700 400, inter 500 600
+// @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,700;1,400&display=swap');
+@import "fontscript";
+$font-1: Gotham, Arial, sans-serif;
+$font-2: Inter, Arial, sans-serif;
+// Fonts test
+// h1 {
+// 	font-family: $font-1;
+// 	font-weight: 700;
+// }
+
+
+// Colors
+$color-1: #000;
+$color-2: #fff;
+$color-3: #49576D;
+$color-4: #38475E;
+$color-5: #D6E1E9;
+$color-6: #C3CFD8;
+$color-7: #5561FF;
+$color-8: #3643FC;
+$color-9: #556072;
+$color-10: #9fb3c1;
+
+
+// Page sizes
+$font-size-default: 16px; //px
+$page-min-width: 320px; //px
+$page-max-width: 1920;
+$container-base-width: 1166;
+$container-padding: 12;
+$container-width: $container-padding * 2 + $container-base-width;
+
+
+// Media breakpoints
+$desktop: $container-width;
+$tablet: 992;
+$mobile: 889;//782
+$mobile-s: 600;//480
+$mobile-s2: 420;
+$mobile-s3: 375;
+$mobile-s4: 320;
+
+$media-header: $mobile;
+$media-header2: 390;
+
+$media-footer: 850;
+$media-footer2: 530;
+
+
+
+// Transitions
+$timer-hover: 0.15s;
+$timer-menu: 0.5s;
+$timer-modal: 0.7s;
+$timer-select: 0.2s;
+$timer-spoiler: 0.3s;
+$timer-slider: 0.5s;
+$timer-accordion: 0.3s;
+$timer-tabs: 0.8s;
+$timer-theme: 1s;
+
+
+@import "_globs";
+@import "_main";
+@import "_404";
+@import "_print";
