@@ -2,7 +2,7 @@
 
 // CLEANING //
 require_once 'functions/wp_clean.php';
-// Manually delete readme.html
+// Manually delete readme.html from WP root
 
 
 // Site styles & scripts
@@ -11,17 +11,18 @@ add_action('wp_enqueue_scripts', function() {
 
 	wp_enqueue_style(
 		'main-style', // идентификатор
-		get_template_directory_uri() . '/css/website.style.css',  // URL
+		get_template_directory_uri() . '/assets/css/website.style.min.css',
 		[], // зависимости
 		'1' // версия
 	);
 	wp_enqueue_script(
 		'main-script', // идентификатор
-		get_template_directory_uri() . '/js/website.script.js',  // URL
+		get_template_directory_uri() . '/assets/js/website.script.min.js',
 		[], // зависимости
 		'1', // версия
 		true // в футере
 	);
+
 	// wp_add_inline_script(
 	// 	'admin-bar',
 	// 	'document.querySelector(".header").style.top = "46px";'
@@ -50,15 +51,15 @@ add_action('after_setup_theme', function() {
 
 
 // WP Term Image - поддержка миниатюр для таксономий
-require_once __DIR__ . '/functions/wp_term_image.php';
-add_action( 'admin_init', 'kama_wp_term_image' );
-function kama_wp_term_image(){
-	// Укажем для какой таксономии нужна возможность устанавливать картинки.
-	// Можно не указывать, тогда возможность будет автоматом добавлена для всех публичных таксономий.
-	\Kama\WP_Term_Image::init( [
-		// 'taxonomies' => [ 'post_tag' ],
-	] );
-};
+// require_once __DIR__ . '/functions/wp_term_image.php';
+// add_action('admin_init', 'kama_wp_term_image');
+// function kama_wp_term_image(){
+// 	// Укажем для какой таксономии нужна возможность устанавливать картинки.
+// 	// Можно не указывать, тогда возможность будет автоматом добавлена для всех публичных таксономий.
+// 	\Kama\WP_Term_Image::init([
+// 		// 'taxonomies' => [ 'post_tag' ],
+// 	]);
+// };
 
 
 // New taxonomy
@@ -105,5 +106,3 @@ function kama_wp_term_image(){
 // 		'has_archive'         => true,
 // 	]);
 // });
-
-

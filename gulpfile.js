@@ -1,18 +1,22 @@
-// npm i --save-dev *plugin*
 let isLiteBuild = isWP = false, load = {};
 
+//////////////////////////////////////////////
 
-// Basic settings:
+// Basic settings //
 let scriptsPrefix = 'website.'
 
-isWP = true
-// isLiteBuild = true
-// load.service = true
-// load.libs = true
+isLiteBuild = true
 // load.media = true
+// load.libs = true
+// load.service = true
+isWP = true
 
-/////////////////////////////////////////////////////////////////
 
+if (isWP) isLiteBuild = false // important
+
+//////////////////////////////////////////////
+
+// Includes //
 const { src, dest } = require('gulp'),
 	gulp = require('gulp'),
 	fs = require('fs'),
@@ -34,8 +38,9 @@ const { src, dest } = require('gulp'),
 	through = require('through2'), // for gulp-scale-images
 	imagemin = require('gulp-imagemin-changba');
 
-/////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////
 
+// Path //
 let $source = '#src';
 let $baseDir = {
 	html: $source + '/',
@@ -63,7 +68,8 @@ let path = {
 		fonts_ttf: $baseDir.fonts + '*.ttf',
 	},
 	src: {
-		html: [$baseDir.html + '**/*.html', '!' + $baseDir.html + '**/[_#]*.html'],
+		html: [$baseDir.html + '**/*.html', '!' + $baseDir.html + '**/#*.html', '!' + $baseDir.html + '**/parts/*'],
+		html_wp: [$baseDir.html + '**/*.html', '!' + $baseDir.html + '**/#*.html'],
 		css: $baseDir.css + '*style.scss',
 		js: $baseDir.js + '*.js',
 		data: $baseDir.data + '**/*',
@@ -89,7 +95,7 @@ let path = {
 	}
 }
 
-/////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////
 
 function cb() {}
 
@@ -104,24 +110,37 @@ function clean() {
 	return del(path.clean);
 }
 
-/////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////
 
 function html(cb, file) {
-	let filepath = path.src.html, extDir = '';
-	if (file && !file.match(/\/[_#]/)) {
-		filepath = file;
-		extDir = getExtendedDir('html', file);
+	let filepath = isWP ? path.src.html_wp : path.src.html, extDir = '';
+	if (file && !file.match(/\/#/)) {
+		if (isWP || !isWP && !file.match(/\/parts\//)) {
+			filepath = file;
+			extDir = getExtendedDir('html', file);
+		}
 	}
-	return src(filepath)
-		.pipe(fileinclude({
-			indent: true,
-			context: {
-				light: isLiteBuild
-			}
-		}))
+
+	let stream = src(filepath);
+	if (isWP)
+		stream = stream
+			.pipe(rename(function(path) {
+				if (path.basename == 'index') path.basename = 'home';
+				path.extname = '.php';
+			}));
+	else
+		stream = stream
+			.pipe(fileinclude({
+				indent: true,
+				context: {light: isLiteBuild}
+			}));
+	
+	return stream
 		.pipe(dest(path.build.root + extDir))
 		.pipe(browsersync.stream());
 }
+
+//////////////////////////////////////////////
 
 function css() {
 	let stream = src(path.src.css)
@@ -150,6 +169,8 @@ function css() {
 		.pipe(browsersync.stream());
 }
 
+//////////////////////////////////////////////
+
 function js() {
 	let stream = src(path.src.js)
 		.pipe(fileinclude())
@@ -170,6 +191,8 @@ function js() {
 		.pipe(browsersync.stream());
 }
 
+//////////////////////////////////////////////
+
 function data(cb, file) {
 	let filepath = file ? file : path.src.data;
 	let extDir = file ? getExtendedDir('data', file) : '';
@@ -178,16 +201,22 @@ function data(cb, file) {
 		.pipe(browsersync.stream());
 }
 
+//////////////////////////////////////////////
+
 function service(cb, file) {
 	if (!isLiteBuild || load.service) {
 		let filepath = file ? file : path.src.service;
 		let extDir = file ? getExtendedDir('service', file) : '';
-		return src(filepath)
+		return src(filepath, {
+				allowEmpty: true // .htaccess error fix
+			})
 			.pipe(dest(path.build.root + extDir))
 			.pipe(browsersync.stream());
 	}
 	else cb();
 }
+
+//////////////////////////////////////////////
 
 function libs(cb) {
 	if (!isLiteBuild || load.libs)
@@ -195,6 +224,8 @@ function libs(cb) {
 			.pipe(dest(path.build.libs));
 	else cb();
 }
+
+//////////////////////////////////////////////
 
 function media(cb, file) {
 	if (!isLiteBuild || load.media) {
@@ -207,7 +238,7 @@ function media(cb, file) {
 	else cb();
 }
 
-/////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////
 
 const faviconSizes = { L: 270, M: 180, S: 32 }
 
@@ -286,7 +317,7 @@ function images(cb, filepath) {
 	}
 
 	let stream, extDir = '';
-	// если 1 файл
+	// if 1 file
 	if (filepath) {
 		extDir = getExtendedDir('img', filepath);
 		// 1x
@@ -306,7 +337,7 @@ function images(cb, filepath) {
 		if (filepath.match(/favicon\.png/))
 			stream = getFaviconStream(filepath);
 	}
-	// если все файлы
+	// if all files
 	else {
 		stream = streamqueue(
 			{ objectMode: true },
@@ -318,21 +349,23 @@ function images(cb, filepath) {
 			getFaviconStream()
 		)
 	}
-	// общее
+	// common
 	if (!isLiteBuild)
 		stream = stream
 			.pipe(imagemin([
 				imagemin.mozjpeg({ quality: 80, progressive: true }),
 				imagemin.optipng({ optimizationLevel: 5 })
 			]));
-	// если все файлы, добавляем $
+
+	// if all files, add $-files
 	if (!filepath) stream = stream.pipe(src(uncompressed));
+
 	return stream
 		.pipe(dest(path.build.img + extDir))
 		.pipe(browsersync.stream());
 }
 
-/////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////
 
 function fonts(cb, filepath = path.src.fonts_ttf) {
 	let stream;
@@ -382,7 +415,7 @@ function fontsStyle() {
 	}
 }
 
-/////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////
 
 function browserSyncInit() {
 	setTimeout(() => {
@@ -406,7 +439,7 @@ function watchFiles() {
 			f(undefined, fixPath(path));
 		});
 	}
-	gulp.watch([path.watch.css], css);//.on('change', browsersync.reload);
+	gulp.watch([path.watch.css], css).on('change', browsersync.reload);
 	gulp.watch([path.watch.js], js);
 	conditionalWatch(gulp.watch([path.watch.html]), html);
 	conditionalWatch(gulp.watch([path.watch.data]), data);
@@ -441,3 +474,11 @@ exports.css = css;
 exports.html = html;
 exports.start = start;
 exports.default = start;
+
+//////////////////////////////////////////////
+
+// Info
+// npm i --save-dev *plugin*
+
+// npm i -g browser-sync
+// browser-sync start --proxy "localhost-graphite" --files "**/*" --no-notify

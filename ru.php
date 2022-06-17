@@ -1,48 +1,6 @@
-<!DOCTYPE html>
-<html lang="en-US">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'"> -->
-	<title>Графит Блог</title>
-	<meta name="description" content="Описание">
-	<meta name="robots" content="noindex, nofollow">
-	<!-- <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/> -->
-	<!-- <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css"> -->
-	<link rel="stylesheet" href="css/website.style.css">
-	<!-- <link rel="stylesheet" href="css/website.style.min.css"> -->
-	<link rel="icon" href="media/img/favicon-32.png" sizes="32x32">
-	<link rel="icon" href="media/img/favicon-180.png" sizes="180x180">
-	<link rel="apple-touch-icon" href="media/img/favicon-180.png" sizes="180x180">
-	<meta name="msapplication-TileImage" content="media/img/favicon-270.png">
-</head>
-<body>
-<noscript>
-	<div class="noscript-alert">
-		<p>For full functionality of this site it is necessary to enable JavaScript.<br>Here are the <a href="https://www.enable-javascript.com/">instructions how to enable JavaScript in your web browser</a>.</p><br>
-		<p>Для полной функциональности этого сайта необходимо включить JavaScript.<br>Вот <a href="https://www.enable-javascript.com/ru/">инструкции, как включить JavaScript в вашем браузере</a>.</p>
-	</div>
-</noscript>
-<div class="loadscreen _locked">
-	<div class="loadscreen__content">
-		<p><i class="icon-spinner"></i></p>
-	</div>
-</div>
-
-
-<script id="header-menu-options">
-	// список пунктов меню в _header.html
-	// наличие и порядок устанавливаются в массиве 'links'
-	// 'activeLink' добавляет класс 'this-page'
-	// тег 'script' можно удалить
-	
-	// let headerMenuOptions = {
-	// 	links: ['home','products','about','contacts'],
-	// 	activeLink: 'home'
-	// }
-</script>
-
-<!-- <div id="wpadminbar">wpadminbar</div> -->
+<?php
+get_template_part('parts/header');
+?>
 
 <main class="main --page-home">
 	<div class="main__container container">
@@ -206,60 +164,4 @@
 	</div>
 </div>
 
-<footer class="footer">
-	<p class="footer__copy">© <a href="/" title="Go to Homepage">Graphite Blog</a> 2022</p>
-</footer>
-
-<section class="modal">
-	<div class="modal__window" id="modal-contact">
-		<div class="modal__wrapper">
-			<div class="modal__content">
-				<div class="modal__close-button"><i class="icon-cross"></i></div>
-
-				<form class="contact-form" name="contact-form" action="#">
-					<p class="contact-form__title">Get in touch!</p>
-					<div class="contact-form__links">
-						<a class="contact-form__link" href="#">
-							<i class="icon-mail"></i>
-							testmail@testmail.com
-						</a>
-						<a class="contact-form__link" href="#">
-							<i class="icon-send"></i>
-							t.me/test
-						</a>
-					</div>
-					<input class="contact-form__name _req" type="text" name="name" placeholder="Your Name">
-					<input class="contact-form__email _req" type="text" name="email" placeholder="Email">
-					<div class="form-report"></div>
-					<button class="contact-form__button g-button" type="submit">
-						<i class="icon-arrow-2"></i>
-						<!-- Sending progress bar inside the button -->
-						<span class="progress">
-							<span class="progress__box">
-								<i></i><i></i><i></i>
-							</span>
-						</span>
-					</button>
-				</form>
-						
-			</div>
-		</div>
-	</div>
-</section>
-
-<!-- SVG test -->
-<!-- <img style="width: 300px;" src="media/img/icon-twitter.svg"> -->
-
-
-
-
-
-<!-- <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script> -->
-<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> -->
-<!-- <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script> -->
-<!-- <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js" integrity="sha256-eTyxS0rkjpLEo16uXTS0uVCS4815lc40K2iVpWDvdSY=" crossorigin="anonymous"></script> -->
-<script src="js/website.script.js"></script>
-<!-- <script src="js/website.script.min.js"></script> -->
-
-</body>
-</html>
+<?php get_template_part('parts/footer'); ?>

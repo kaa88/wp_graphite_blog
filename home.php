@@ -1,19 +1,14 @@
-<!-- <?php
+<?php
 /* Template Name: Home */
 get_template_part('parts/header');
-?> -->
-@@include('parts/header.html', {
-	'title': 'Graphite Blog',
-	'descr': 'Description',
-	'robots': 'noindex, nofollow',
-})
+?>
 
 <main class="main --page-home">
 	<div class="main__container container">
 
 		<div class="main__author author">
 			<div class="author__img">
-				<img src="media/img/profile-photo-s.jpg" alt="">
+				<img src="<?php echo get_template_directory_uri() . '/assets/media/img/profile-photo-s.jpg'; ?>" alt="">
 			</div>
 			<div class="author__info">
 				<h1 class="author__title">Andrei K.</h1>
@@ -166,9 +161,7 @@ get_template_part('parts/header');
 </div>
 
 <section class="modal">
-	<!-- <?php get_template_part('parts/modal-contact'); ?> -->
-	@@include('parts/modal-contact.html')
+	<?php get_template_part('parts/modal-contact'); ?>
 </section>
 
-<!-- <?php get_template_part('parts/footer'); ?> -->
-@@include('parts/footer.html')
+<?php get_template_part('parts/footer'); ?>
