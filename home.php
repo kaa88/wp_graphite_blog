@@ -8,40 +8,32 @@ get_template_part('parts/header');
 
 		<div class="main__author author">
 			<div class="author__img">
-				<img src="<?php echo get_template_directory_uri() . '/assets/media/img/profile-photo-s.jpg'; ?>" alt="">
+				<img src="<?php the_field('author_photo') ?>" alt="">
 			</div>
 			<div class="author__info">
-				<h1 class="author__title">Andrei K.</h1>
+				<h1 class="author__title"><?php the_field('author_title') ?></h1>
 				<p class="author__text">
-					Something about me. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
+					<?php the_field('author_text') ?>
 				</p>
 			</div>
 			<div class="author__contact-links contact-links">
-				<a class="contact-links__link" href="#" title="Bitrix">
-					<i class="icon-bitrix"></i>
-				</a>
-				<a class="contact-links__link" href="#" title="Wordpress">
-					<i class="icon-wp"></i>
-				</a>
-				<a class="contact-links__link" href="#" title="Twitter">
-					<i class="icon-twitter"></i>
-				</a>
-				<a class="contact-links__link" href="#" title="link">
-					<i class="icon-link"></i>
-				</a>
-				<a class="contact-links__link" href="#" title="send">
-					<i class="icon-send"></i>
-				</a>
-				<a class="contact-links__link" href="#" title="mail">
-					<i class="icon-mail"></i>
-				</a>
+				<?php 
+					$list = get_field('socials_group');
+					if ($list) {
+						for ($i = 0; $i < count($list); $i++) {
+							echo '<a class="contact-links__link" href="'.$list[$i]['socials_link'].'" title="'.$list[$i]['socials_select'].'">
+								<i class="icon-'.$list[$i]['socials_select'].'"></i>
+							</a>';
+						}
+					}
+				?>
 			</div>
 		</div>
 
 		<div class="main__controls controls">
-			<a class="controls__button controls__button--download g-button" href="media/doc/docsample.pdf">
+			<a class="controls__button controls__button--download g-button" href="<?php the_field('author_cv') ?>" target="_blank">
 				<i class="icon-download"></i>
-				<span>Download CV</span>
+				<span><?php the_field('author_button_text') ?></span>
 			</a>
 			<a class="controls__button controls__button--contact g-button modal-link" href="#modal-contact">
 				<span>Concact</span>
@@ -59,79 +51,71 @@ get_template_part('parts/header');
 			<div class="spoiler">
 				<div class="spoiler__header">
 					<div class="spoiler__header-inner">
-						<p>Biography</p>
+						<p><?php the_field('spoiler_title') ?></p>
 						<i class="icon-arrow"></i>
 					</div>
 				</div>
 				<div class="spoiler__wrapper">
 					<div class="spoiler__content">
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+						<p><?php the_field('spoiler_text') ?></p>
 					</div>
 				</div>
 			</div>
 		</div>
 		
 		<div class="main__article-box article-box">
-			<a class="article-box__article-preview article-preview" href="single.html">
-				<span class="article-preview__img">
-					<img src="media/img/profile-photo-s.jpg" alt="">
-				</span>
-				<span class="article-preview__content">
-					<span class="article-preview__title">Title</span>
-					<span class="article-preview__text">
-						Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero minima quos eos excepturi rem inventore suscipit molestias fugit perferendis laboriosam.
-					</span>
-				</span>
-			</a>
-			<a class="article-box__article-preview article-preview" href="single.html">
-				<span class="article-preview__img">
-					<img src="media/img/1x1.png" alt="">
-				</span>
-				<span class="article-preview__content">
-					<span class="article-preview__title">Title</span>
-					<span class="article-preview__text">
-						Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero minima quos eos excepturi rem inventore suscipit molestias fugit perferendis laboriosam.
-					</span>
-				</span>
-			</a>
-			<a class="article-box__article-preview article-preview" href="single.html">
-				<span class="article-preview__img">
-					<img src="media/img/1x1.png" alt="">
-				</span>
-				<span class="article-preview__content">
-					<span class="article-preview__title">Title</span>
-					<span class="article-preview__text">
-						Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero minima quos eos excepturi rem inventore suscipit molestias fugit perferendis laboriosam.
-					</span>
-				</span>
-			</a>
+		
+			<?php
+				$myposts = get_posts([
+					'numberposts' => 99,
+					'category'    => 1,
+				]);
+				foreach( $myposts as $post ){
+					setup_postdata( $post );
+					?>
+						<a class="article-box__article-preview article-preview" href="<?php the_permalink() ?>">
+							<span class="article-preview__img">
+								<?php if (has_post_thumbnail()) {
+										the_post_thumbnail('thumbnail');
+								}; ?>
+							</span>
+							<span class="article-preview__content">
+								<span class="article-preview__title"><?php the_title() ?></span>
+								<span class="article-preview__text">
+									<?php the_excerpt() ?>
+								</span>
+							</span>
+						</a>
+				<?php }
+				wp_reset_postdata();
+			?>
+
 		</div>
 
 		<div class="main__card-box card-box">
-			<a class="card-box__card-preview card-preview" href="single.html">
-				<span class="card-preview__img">
-					<img src="media/img/card1.jpg" alt="">
-				</span>
-				<span class="card-preview__title">iOS applications</span>
-			</a>
-			<a class="card-box__card-preview card-preview" href="single.html">
-				<span class="card-preview__img">
-					<img src="media/img/card2.jpg" alt="">
-				</span>
-				<span class="card-preview__title">Design systems</span>
-			</a>
-			<a class="card-box__card-preview card-preview" href="single.html">
-				<span class="card-preview__img">
-					<img src="media/img/profile-photo-s.jpg" alt="">
-				</span>
-				<span class="card-preview__title">Profiling</span>
-			</a>
-			<a class="card-box__card-preview card-preview" href="single.html">
-				<span class="card-preview__img">
-					<img src="media/img/1x1.png" alt="">
-				</span>
-				<span class="card-preview__title">Testing</span>
-			</a>
+
+			<?php
+				$myposts = get_posts([
+					'numberposts' => 99,
+					'category'    => 3,
+					'order'       => 'ASC',
+				]);
+				foreach( $myposts as $post ){
+					setup_postdata( $post );
+					?>
+						<a class="card-box__card-preview card-preview" href="<?php the_permalink() ?>">
+							<span class="card-preview__img">
+								<?php if (has_post_thumbnail()) {
+									the_post_thumbnail();
+								}; ?>
+							</span>
+							<span class="card-preview__title"><?php the_title() ?></span>
+						</a>
+				
+				<?php }
+				wp_reset_postdata();
+			?>
+
 		</div>
 
 	</div>
@@ -140,25 +124,7 @@ get_template_part('parts/header');
 </main>
 
 
-
-<!-- popup -->
-<div class="popup scroll-lock-item-m">
-	<div class="cookie-alert">
-		<div class="popup__close-btn"><i class="icon-cross"></i></div>
-		<p class="cookie-alert__title">Cookie alert</p>
-		<p class="cookie-alert__text-closed">
-			Lorem ipsum dolor sit amet, consectetur adipiscing ut labore et dolore magna aliqua. 
-		</p>
-		<p class="cookie-alert__text-opened">
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-		</p>
-		<div class="cookie-alert__link-container"><span class="cookie-alert__link">About cookies</span></div>
-		<div class="cookie-alert__buttons">
-			<div class="cookie-alert__accept g-button">Accept</div>
-			<div class="cookie-alert__close g-button"><span>Close</span></div>
-		</div>
-	</div>
-</div>
+<?php get_template_part('parts/popup'); ?>
 
 <section class="modal">
 	<?php get_template_part('parts/modal-contact'); ?>

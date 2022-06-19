@@ -494,6 +494,7 @@ cookieAlert.init = function() {
 			setCookie({
 				name: 'cookies_accepted',
 				value: 'true',
+				path: '/',
 				expires: 365
 			});
 			this.popup.close();

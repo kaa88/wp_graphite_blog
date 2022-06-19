@@ -80,35 +80,35 @@ function add_custom_fields() {
 		->set_icon('dashicons-align-right')
 
 	// Header tab
-		->add_tab('Шапка', [
-			Field::make('image', 'header_logo_img', 'Иконка логотипа')->set_value_type('url'),
-			Field::make('text', 'header_logo_text', 'Текст логотипа'),
-		])
+		// ->add_tab('Шапка', [
+		// 	Field::make('image', 'header_logo_img', 'Иконка логотипа')->set_value_type('url'),
+		// 	Field::make('text', 'header_logo_text', 'Текст логотипа'),
+		// ])
 
 	// Footer tab
-		->add_tab('Подвал', [
-			Field::make('text', 'footer_address', 'Адрес'),
-			Field::make('text', 'footer_phone_link', 'Телефон - ссылка')->set_width(50)
-				->set_help_text('Формат телефона для ссылки: +79999999999'),
-			Field::make('text', 'footer_phone_text', 'Телефон - отображаемый текст')->set_width(50),
-			Field::make('text', 'footer_email_link', 'Email - ссылка')->set_width(50),
-			Field::make('text', 'footer_email_text', 'Email - отображаемый текст')->set_width(50),
+		// ->add_tab('Подвал', [
+		// 	Field::make('text', 'footer_address', 'Адрес'),
+		// 	Field::make('text', 'footer_phone_link', 'Телефон - ссылка')->set_width(50)
+		// 		->set_help_text('Формат телефона для ссылки: +79999999999'),
+		// 	Field::make('text', 'footer_phone_text', 'Телефон - отображаемый текст')->set_width(50),
+		// 	Field::make('text', 'footer_email_link', 'Email - ссылка')->set_width(50),
+		// 	Field::make('text', 'footer_email_text', 'Email - отображаемый текст')->set_width(50),
 
-			Field::make('separator', 'separator_footer_socials', 'Соцсети:'),
-			Field::make('complex', 'footer_socials', 'Соцсети')
-				->add_fields([
-					Field::make('select', 'name', 'Выберите')->set_width(50)
-						->set_options([
-							'twitter' => 'Twitter',
-							'facebook' => 'Facebook',
-							'pinterest' => 'Pinterest',
-							'google-plus' => 'Google+'
-						]),
-					Field::make('text', 'link', 'Ссылка')->set_width(50)
-						->set_help_text('Введите адрес полностью, начиная с https://'),
-				]),
+		// 	Field::make('separator', 'separator_footer_socials', 'Соцсети:'),
+		// 	Field::make('complex', 'footer_socials', 'Соцсети')
+		// 		->add_fields([
+		// 			Field::make('select', 'name', 'Выберите')->set_width(50)
+		// 				->set_options([
+		// 					'twitter' => 'Twitter',
+		// 					'facebook' => 'Facebook',
+		// 					'pinterest' => 'Pinterest',
+		// 					'google-plus' => 'Google+'
+		// 				]),
+		// 			Field::make('text', 'link', 'Ссылка')->set_width(50)
+		// 				->set_help_text('Введите адрес полностью, начиная с https://'),
+		// 		]),
 
-		])
+		// ])
 
 	// Metrics tab
 		->add_tab('Метрики', [
@@ -120,28 +120,40 @@ function add_custom_fields() {
 //////////////////////////////////////////////
 	// Editor fields:
 
-	// Banner section
-		Container::make('post_meta', 'Banner')
-			->where('post_id', '=', 15)
+	// Author section
+		Container::make('post_meta', 'Автор')
+			->where('post_id', '=', 32)
 			->set_priority('core')
 			->add_fields([
-				Field::make('text', 'banner_title', 'Заголовок'),
-				Field::make('text', 'banner_text', 'Текст'),
-
-				Field::make('text', 'banner_button_text', 'Кнопка - текст'),
-				Field::make('association', 'banner_button_link', 'Кнопка - ссылка')
-					->set_max(1)
-					->set_types([[
-						'type' => 'post',
-						'post_type' => 'page'
-					]]),
-
-				Field::make('image', 'banner_bg_dt', 'Background desktop')
+				Field::make('image', 'author_photo', 'Фото')
 					->set_value_type('url')
 					->set_width(50),
-				Field::make('image', 'banner_bg_mob', 'Background mobile')
-					->set_value_type('url')
+				Field::make('text', 'author_title', 'Заголовок'),
+				Field::make('text', 'author_text', 'Текст'),
+
+				Field::make( 'file', 'author_cv', 'Кнопка - файл' )
+				->set_value_type( 'url' )
+				->set_width(50),
+				Field::make('text', 'author_button_text', 'Кнопка - текст')
+				->set_width(50),
+
+				Field::make( 'complex', 'socials_group', __( 'Группа ссылок на соцсети' ) )
+				->add_fields( array(
+					Field::make( 'select', 'socials_select', __( 'Выбор' ) )
+					->set_options( array(
+						'bitrix' => 'Bitrix',
+						'wp' => 'Wordpress',
+						'twitter' => 'Twitter',
+						'link' => 'Link',
+						'send' => 'Telegram',
+						'mail' => 'Email',
+					) )
 					->set_width(50),
+					Field::make('text', 'socials_link', 'Ссылка')
+					->set_width(50),
+				) ),
+				Field::make('text', 'spoiler_title', 'Заголовок спойлера'),
+				Field::make('textarea', 'spoiler_text', 'Текст спойлера'),
 			]);
 
 } // end add_custom_fields()

@@ -32,7 +32,7 @@ add_action('wp_enqueue_scripts', function() {
 add_action('after_setup_theme', function() {
 	// Supports
 	add_theme_support('title-tag'); // сам заполняет title при wp_head()
-	add_theme_support('admin-bar', ['callback'=>'__return_false']); // убирает верхний отступ админ-бара
+	// add_theme_support('admin-bar', ['callback'=>'__return_false']); // убирает верхний отступ админ-бара
 	add_theme_support('post-thumbnails'); // поддержка миниатюр для постов
 	add_theme_support('html5', [ // поддержка html5
 		'comment-list','comment-form','search-form','gallery','caption','script','style',
@@ -46,20 +46,20 @@ add_action('after_setup_theme', function() {
 });
 
 // Carbon fields
-// require_once 'functions/carbon_fields.php';
-// add_action('carbon_fields_register_fields', 'add_custom_fields');
+require_once 'functions/carbon_fields.php';
+add_action('carbon_fields_register_fields', 'add_custom_fields');
 
 
 // WP Term Image - поддержка миниатюр для таксономий
-// require_once __DIR__ . '/functions/wp_term_image.php';
-// add_action('admin_init', 'kama_wp_term_image');
-// function kama_wp_term_image(){
-// 	// Укажем для какой таксономии нужна возможность устанавливать картинки.
-// 	// Можно не указывать, тогда возможность будет автоматом добавлена для всех публичных таксономий.
-// 	\Kama\WP_Term_Image::init([
-// 		// 'taxonomies' => [ 'post_tag' ],
-// 	]);
-// };
+require_once __DIR__ . '/functions/wp_term_image.php';
+add_action('admin_init', 'kama_wp_term_image');
+function kama_wp_term_image(){
+	// Укажем для какой таксономии нужна возможность устанавливать картинки.
+	// Можно не указывать, тогда возможность будет автоматом добавлена для всех публичных таксономий.
+	\Kama\WP_Term_Image::init([
+		// 'taxonomies' => [ 'post_tag' ],
+	]);
+};
 
 
 // New taxonomy
