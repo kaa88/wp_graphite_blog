@@ -1,68 +1,122 @@
 <?php
 
-// CLEANING //
+// Cleaning //
 require_once 'functions/wp_clean.php';
 // Manually delete readme.html from WP root
 
+//////////////////////////////////////////////////
 
-// Site styles & scripts
-add_action('wp_enqueue_scripts', function() {
-	// wp_enqueue_style('dashicons'); // WP icons
-
-	wp_enqueue_style(
-		'main-style', // идентификатор
-		get_template_directory_uri() . '/assets/css/website.style.min.css',
-		[], // зависимости
-		'1' // версия
-	);
-	wp_enqueue_script(
-		'main-script', // идентификатор
-		get_template_directory_uri() . '/assets/js/website.script.min.js',
-		[], // зависимости
-		'1', // версия
-		true // в футере
-	);
-
-	// wp_add_inline_script(
-	// 	'admin-bar',
-	// 	'document.querySelector(".header").style.top = "46px";'
-	// );
-});
-
+// Support //
 add_action('after_setup_theme', function() {
-	// Supports
-	add_theme_support('title-tag'); // сам заполняет title при wp_head()
-	// add_theme_support('admin-bar', ['callback'=>'__return_false']); // убирает верхний отступ админ-бара
+	add_theme_support('title-tag'); // заполняет title при wp_head()
 	add_theme_support('post-thumbnails'); // поддержка миниатюр для постов
 	add_theme_support('html5', [ // поддержка html5
 		'comment-list','comment-form','search-form','gallery','caption','script','style',
 	]);
+	// add_theme_support('admin-bar', ['callback'=>'__return_false']); // убирает верхний отступ админ-бара
+});
 
-	// Области Меню
-	register_nav_menus([
-		'header-menu' => 'Шапка',
-		// 'footer-menu' => 'Подвал',
+//////////////////////////////////////////////////
+
+// Site styles & scripts //
+add_action('wp_enqueue_scripts', function() {
+	$version = 2; // прибавить 1 после внесения изменений в стили или скрипты
+	$m = ''; //.min
+	$tdir = get_template_directory_uri() . '/assets';
+	$cssdir = $tdir.'/css/website.style'.$m.'.css';
+	$jsdir = $tdir.'/js/website.script'.$m.'.js';
+
+	wp_enqueue_style( 'main-style', $cssdir, [], $version );
+	wp_enqueue_script( 'main-script', $jsdir, [], $version, true );
+	
+	// wp_enqueue_style('dashicons'); // WP icons
+});
+
+//////////////////////////////////////////////////
+
+// Media files //
+add_filter('jpeg_quality', create_function('', 'return 80;')); // встроенное сжатие WP
+
+// Custom image sizes:
+// Пояснение: ВП сжимает только нарезанные картинки, исходная не будет сжата, поэтому нужен плагин.
+// Если плагин сжимает все размеры, то нужно отключить ВП-шное сжатие.
+// Если приходится менять размеры и ребилдить нарезку (плагин Force regenerate thumbnails), то сначала нужно восстановить все сжатые изображения, чтобы не было потери качества. Для этого нужно делать резервное копирование исходной картинки и отключить автоудаление копий. Чтобы не было проблем со scaled при ребилде, можно отключить scaled и сделать ограничение на размер загрузки (2мб например).
+
+// Ограничение на размер файла в php.ini или .htaccess (в .htaccess в начале каждой строки добавить 'php_value'):
+// upload_max_filesize 2M
+// post_max_size 3M
+// memory_limit 5M // должно быть больше, чем upload_max_filesize и post_max_size
+
+// Плагин reSmush.it (бесплатно в облаке для всех изображений до 5мб) - сжимает только оригинал или scaled.
+
+// Встроенные размеры в настройках: 150 300 1024
+// Встроенные размеры в ядре: 768 1536 2048 2560
+
+// Изменение стандартных размеров ВП:
+add_filter('intermediate_image_sizes', function($sizes){
+	return array_diff( $sizes, [
+	// размеры, которые нужно отключить:
+		'medium_large',
+		// '1536x1536',
+		'2048x2048',
 	]);
 });
 
-// Carbon fields
+// image-scaled:
+// add_filter('big_image_size_threshold', function(){ return 1536; }); // изменить размер '-scaled' (по умолчанию 2560)
+add_filter('big_image_size_threshold', '__return_zero'); // убрать размер '-scaled'
+
+// Мои размеры:
+// add_image_size('theme-image-size-s', 350, 0);
+// add_image_size('theme-image-size-m', 700, 0);
+// add_image_size('theme-image-size-l', 1024, 0);
+// add_image_size('theme-image-size-xl', 1600, 0);
+// add_image_size('theme-image-size-xxl', 1920, 0);
+// add_image_size('theme-image-size-max', 3840, 0);
+
+// Размер медиафайлов по умолчанию в редакторе ВП:
+add_action('after_setup_theme', function() {
+	update_option('image_default_size', 'medium'); // default: full-size
+});
+
+//////////////////////////////////////////////////
+
+// Области Меню //
+// add_action('after_setup_theme', function() {
+// 	register_nav_menus([
+// 		'header-menu' => 'Шапка',
+// 		// 'footer-menu' => 'Подвал',
+// 	]);
+// });
+
+//////////////////////////////////////////////////
+
+// Carbon fields //
 require_once 'functions/carbon_fields.php';
 add_action('carbon_fields_register_fields', 'add_custom_fields');
 
+//////////////////////////////////////////////////
 
-// WP Term Image - поддержка миниатюр для таксономий
-require_once __DIR__ . '/functions/wp_term_image.php';
-add_action('admin_init', 'kama_wp_term_image');
-function kama_wp_term_image(){
-	// Укажем для какой таксономии нужна возможность устанавливать картинки.
-	// Можно не указывать, тогда возможность будет автоматом добавлена для всех публичных таксономий.
-	\Kama\WP_Term_Image::init([
-		// 'taxonomies' => [ 'post_tag' ],
-	]);
-};
+// Exerpt style //
+add_filter('excerpt_length', function() { return 20; });
+add_filter('excerpt_more', function($more) { return '...'; });
 
+//////////////////////////////////////////////////
 
-// New taxonomy
+// WP Term Image - поддержка миниатюр для таксономий //
+// require_once __DIR__ . '/functions/wp_term_image.php';
+// add_action('admin_init', 'kama_wp_term_image');
+// function kama_wp_term_image(){
+// 	// Укажем для какой таксономии нужна возможность устанавливать картинки.
+// 	// Можно не указывать, тогда возможность будет автоматом добавлена для всех публичных таксономий.
+// 	\Kama\WP_Term_Image::init([
+// 		// 'taxonomies' => [ 'post_tag' ],
+// 	]);
+// };
+
+//////////////////////////////////////////////////
+
+// New taxonomy //
 // add_action( 'init', function(){
 // 	register_taxonomy( 'portfolio_type', [ 'portfolio' ], [
 // 		'labels' => [
@@ -82,8 +136,9 @@ function kama_wp_term_image(){
 // 	] );
 // });
 
+//////////////////////////////////////////////////
 
-// New post type
+// New post type //
 // add_action('init', function() {
 // 	register_post_type('portfolio', [
 // 		'labels' => [

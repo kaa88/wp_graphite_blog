@@ -110,7 +110,27 @@ function add_custom_fields() {
 
 		// ])
 
-	// Metrics tab
+		->add_tab('Модал - контакт', [
+			Field::make('text', 'modal_header', 'Заголовок'),
+			Field::make( 'complex', 'modal_quick_contacts', __( 'Быстрые контакты' ) )
+			->add_fields([
+				Field::make('text', 'link', 'Ссылка')->set_width(33),
+				Field::make('text', 'text', 'Текст кнопки')->set_width(33),
+				Field::make( 'select', 'icon', __( 'Иконка' ) )
+				->set_options([
+					'bitrix' => 'Bitrix',
+					'wp' => 'Wordpress',
+					'twitter' => 'Twitter',
+					'link' => 'Link',
+					'send' => 'Telegram',
+					'mail' => 'Email',
+				])
+				->set_width(33)
+			]),
+			Field::make('text', 'modal_name_placeholder', 'Замещающий текст - имя')->set_width(50),
+			Field::make('text', 'modal_email_placeholder', 'Замещающий текст - email')->set_width(50),
+		])
+		// Metrics tab
 		->add_tab('Метрики', [
 			Field::make('header_scripts', 'metrics', 'HTML-код метрик и счетчиков поисковых систем')
 				->set_default_value('<!-- Здесь будут метрики поисковых систем -->')
@@ -125,8 +145,10 @@ function add_custom_fields() {
 			->where('post_id', '=', 32)
 			->set_priority('core')
 			->add_fields([
-				Field::make('image', 'author_photo', 'Фото')
-					->set_value_type('url')
+				// Field::make('image', 'author_photo', 'Фото')
+				// 	->set_value_type('url')
+				// 	->set_width(50),
+				Field::make('image', 'author_photo2', 'Фото id')
 					->set_width(50),
 				Field::make('text', 'author_title', 'Заголовок'),
 				Field::make('text', 'author_text', 'Текст'),

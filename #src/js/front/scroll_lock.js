@@ -20,7 +20,7 @@
 */
 const scrollLock = {
 	refs: {
-		mobile: jsMediaQueries.mobile
+		mobile: mobileSwitchWidth
 	},
 	defaultElems: ['main', 'footer'],
 	paddingItemClassName: 'scroll-lock-item-p',

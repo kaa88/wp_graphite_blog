@@ -2,11 +2,14 @@
 
 //////////////////////////////////////////////
 
+// Constants
+const mobileSwitchWidth = parseFloat(getComputedStyle(document.body).getPropertyValue('--media-mobile')) || 768;
+
+//////////////////////////////////////////////
+
 // Cookies
 @@include('front/cookies.js')
-
 let cookies = getCookie();
-// console.log(cookies);
 
 //////////////////////////////////////////////
 
@@ -34,23 +37,42 @@ function setupControls() {
 	if (themeBtn) themeBtn.addEventListener('click', () => {
 		if (transitionLock.check(pageOptions.themeTimer)) return;
 		pageOptions.setOpt(pageOptions.themePrefix + pageOptions.themeName);
-		if (cookies && cookies.cookies_accepted) {
-			if (document.body.classList.contains('theme-dark')) {
-				setCookie({
-					name: 'theme',
-					value: pageOptions.themeName,
-					expires: 365
-				});
+
+		if (cookies) {
+			if (cookies.cookies_accepted) {
+				if (document.body.classList.contains('theme-dark')) {
+					setCookie({
+						name: 'theme',
+						value: pageOptions.themeName,
+						expires: 365
+					});
+				}
+				else {
+					setCookie({
+						name: 'theme',
+						value: pageOptions.themeName,
+						expires: -1
+					});
+				}
 			}
 			else {
-				setCookie({
-					name: 'theme',
-					value: pageOptions.themeName,
-					expires: -1
-				});
+				if (document.body.classList.contains('theme-dark')) {
+					setCookie({
+						name: 'theme',
+						value: pageOptions.themeName,
+					});
+				}
+				else {
+					setCookie({
+						name: 'theme',
+						value: pageOptions.themeName,
+						expires: -1
+					});
+				}
 			}
 		}
 	})
+
 	let langBtn = document.querySelector('.controls__lang');
 	if (langBtn) langBtn.addEventListener('click', () => {
 		if (transitionLock.check(1000)) return;
@@ -66,30 +88,13 @@ setupControls();
 
 //////////////////////////////////////////////
 
-// Random
-// @ @include('front/random.js')
-
-//////////////////////////////////////////////
-
 // Loadscreen
 @@include('front/loadscreen.js')
+
+let loadscreenTimer = 0
+if (cookies && cookies.theme) loadscreenTimer = 800
 loadscreen.init({
-	timeout: 1000,
-	// scrollToTop: true
-})
-
-//////////////////////////////////////////////
-
-// JS Media Queries
-@@include('front/js_media_queries.js')
-jsMediaQueries.init({
-	breakpoints: {
-		568: () => {},
-		782: () => {
-			// header.mobileViewService(); // required by Header module
-		},
-		1228: () => {},
-	}
+	timeout: loadscreenTimer
 })
 
 //////////////////////////////////////////////
@@ -106,14 +111,19 @@ scrollLock.init()
 //////////////////////////////////////////////
 
 // Header
-// @ @include('front/header.js')
-// header.init({
-// 	menu: true,
-// 	submenu: true,
-// 	hidingHeader: true,
-// 	elemAboveHeader: true
-// })
+@@include('front/header.js')
+header.init({
+	// menu: true,
+	// submenu: true,
+	// hidingHeader: true,
+	elemAboveHeader: true
+})
 
+//////////////////////////////////////////////
+
+// Footer //
+@@include('front/footer.js')
+footer.init()
 
 //////////////////////////////////////////////
 
@@ -169,145 +179,8 @@ window.addEventListener('load', () => {
 
 //////////////////////////////////////////////
 
-// Select
-// @ @include('front/select.js')
-// const form_select = new Select({
-// 	elem: 'form__select',
-// 	firstOptSelected: true,
-// 	onselect: (selection) => {console.log(selection)}
-// })
-
-//////////////////////////////////////////////
-
-// Accordion
-// @ @include('front/accordion_js.js')
-// const accordion = new Accordion({
-// 	elem: '.js__accordion',
-// 	isOpened: true
-// });
-
-//////////////////////////////////////////////
-
-// Simple counter
-// @ @include('front/simple_counter.js')
-// const simpleCounter = new SimpleCounter({
-// 	launcher: '.test-counter-button',
-// 	output: '.test-counter',
-// 	goal: 51806,
-// 	timeout: 2,
-// })
-// simpleCounter.start()
-
-//////////////////////////////////////////////
-
-// Input range colored
-// @ @include('front/input_range_colored.js')
-// const iRangeClr = new InputRangeColored({
-// 	elem: 'input-range'
-// })
-
-//////////////////////////////////////////////
-
-// Input range double
-// @ @include('front/input_range_double.js')
-// const iRangeDbl = new InputRangeDouble({
-// 	elem: 'form__input-range-dbl',
-// 	start: 200,
-// 	end: 492,
-// 	thumbs: [250, 400],
-// 	bubble: true,
-// 	results: ['form__ir-result1', 'form__ir-result2']
-// })
-
-//////////////////////////////////////////////
-
 // Spoiler
 @@include('front/spoiler.js')
 spoiler.init();
-
-//////////////////////////////////////////////
-
-// Tabs
-// @ @include('front/tabs.js')
-
-//////////////////////////////////////////////
-
-// Up-button
-// @ @include('front/up_button.js')
-// upButton.init();
-
-//////////////////////////////////////////////
-
-// Intersection
-// @ @include('front/intersection.js')
-
-//////////////////////////////////////////////
-
-// Parallax
-// @ @include('front/parallax.js')
-// const parallax = new Parallax({
-// 	parallaxElem: '.parallax',
-// 	scrollElem: '.container',
-// 	start: 500,
-// 	distance: 30,
-// })
-
-//////////////////////////////////////////////
-
-// Pagination
-// @ @include('front/pagination.js')
-// const pagination = new Pagination({
-// 	elem: '.pagination',
-// 	maxLength: 8,
-// })
-
-//////////////////////////////////////////////
-
-// Video player
-// @ @include('front/video_player.js')
-// videoPlayer.init(80);
-
-//////////////////////////////////////////////
-
-// Swiper
-// const swiper = new Swiper('.banner__swiper', {
-// 	navigation: {
-// 		prevEl: '.swiper-button-prev',
-// 		nextEl: '.swiper-button-next',
-// 	},
-// 	pagination: {
-// 		el: '.swiper-pagination',
-// 		type: 'bullets',
-// 	},
-// 	loop: true,
-// 	loopAdditionalSlides: 2,
-// 	speed: 700,
-// 	spaceBetween: 15,
-// 	autoplay: {
-// 		delay: 5000,
-// 		disableOnInteraction: false,
-// 		pauseOnMouseEnter: true,
-// 	},
-// 	breakpoints: {
-// 		782: {}
-// 	},
-// })
-
-//////////////////////////////////////////////
-
-// Print version QR-code
-// @ @include('front/qr_code.js')
-// printQRcode();
-
-//////////////////////////////////////////////
-
-// Send form to email
-// @ @include('back/form_to_email.js')
-// formToEmail.init(true);
-
-//////////////////////////////////////////////
-
-// JSON Load
-// @ @include('back/json_load.js')
 
 //////////////////////////////////////////////

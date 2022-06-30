@@ -8,7 +8,13 @@ get_template_part('parts/header');
 
 		<div class="main__author author">
 			<div class="author__img">
-				<img src="<?php the_field('author_photo') ?>" alt="">
+				<!-- <img src="<?php //the_field('author_photo') ?>" alt=""> -->
+				<?php echo wp_get_attachment_image( carbon_get_the_post_meta('author_photo2')) ?>
+				<!-- чтобы в ВП работала ретина, надо нарезать картинки для разных размеров, он сам выберет -->
+				<!-- максимальная ширина 1920*2 = 3840 -->
+				<!-- но придется всегда указывать нужный размер, т.к. по умолчанию будет выводиться thumbnail 150рх -->
+				<!-- еще сделать выгрузку из gulp без @2x -->
+				<!-- thumb 350 700 1024 1280 1920 3840 full -->
 			</div>
 			<div class="author__info">
 				<h1 class="author__title"><?php the_field('author_title') ?></h1>
@@ -106,7 +112,7 @@ get_template_part('parts/header');
 						<a class="card-box__card-preview card-preview" href="<?php the_permalink() ?>">
 							<span class="card-preview__img">
 								<?php if (has_post_thumbnail()) {
-									the_post_thumbnail();
+									the_post_thumbnail([365]);
 								}; ?>
 							</span>
 							<span class="card-preview__title"><?php the_title() ?></span>
@@ -123,11 +129,10 @@ get_template_part('parts/header');
 
 </main>
 
-
 <?php get_template_part('parts/popup'); ?>
 
 <section class="modal">
 	<?php get_template_part('parts/modal-contact'); ?>
 </section>
 
-<?php get_template_part('parts/footer'); ?>
+<?php get_template_part('parts/footer');

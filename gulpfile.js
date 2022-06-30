@@ -328,7 +328,7 @@ function images(cb, filepath) {
 				.pipe(through.obj(scaleImage2x))
 				.pipe(imageresize(renameImage2x))
 				.pipe(src(filepath));
-		// uncomp
+		// uncompressed
 		if (filepath.match(/\/\$/))
 			return stream
 				.pipe(dest(path.build.img + extDir))

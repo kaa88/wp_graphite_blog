@@ -1,4 +1,5 @@
 /* 
+	Always init header to keep css variables working, even if header is empty
 	Set transition timeout in CSS only
 	
 	Init params {obj}: (defaults = false)
@@ -9,11 +10,12 @@
 */
 const header = {
 	refs: { // dependences
-		mobile: jsMediaQueries.mobile,
+		mobile: mobileSwitchWidth,
 		translock: transitionLock,
 		scrlock: scrollLock
 	},
 	names: {
+		// selectors:
 		elemAboveHeader: '#wpadminbar',
 		header: '.header',
 		menu: '.header-menu-hide-wrapper',
@@ -26,7 +28,10 @@ const header = {
 		menuOptions: '#header-menu-options',
 		submenu: '.header-submenu-hide-wrapper',
 		submenuDropLink: '.submenu-drop-link',
+		// classnames:
+		noheader: 'header--empty',
 		thisPageClass: 'this-page',
+		// css variable names:
 		varTimer: '--timer-menu',
 		varHeight: '--header-height',
 		varTop: '--header-offset-top',
@@ -34,6 +39,14 @@ const header = {
 	},
 	init: function(params = {}) {
 		this.headerElem = document.querySelector(this.names.header);
+		// new
+		if (!this.headerElem) {
+			this.headerElem = document.createElement('header');
+			this.headerElem.className = this.names.noheader;
+			document.body.prepend(this.headerElem);
+		}
+		// /new
+
 		let timeout = parseFloat(getComputedStyle(document.body).getPropertyValue(this.names.varTimer))*1000 || 0;
 
 		this.headerHeight =
