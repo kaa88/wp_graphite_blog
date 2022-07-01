@@ -42,14 +42,17 @@ get_template_part('parts/header');
 				<span><?php the_field('author_button_text') ?></span>
 			</a>
 			<a class="controls__button controls__button--contact g-button modal-link" href="#modal-contact">
-				<span>Concact</span>
+				<span><?php echo __('Contact', 'wp_graphite_blog') ?></span>
 			</a>
 			<div class="controls__theme" title="Change color theme">
 				<span></span>
 			</div>
+
+
 			<div class="controls__lang">
-				<a href="/">EN</a>
-				<a class="_inactive" href="/ru.html">RU</a>
+				<?php wp_nav_menu() ?>
+				<!-- <a href="/">EN</a>
+				<a class="_inactive" href="/ru.html">RU</a> -->
 			</div>
 		</div>
 

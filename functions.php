@@ -82,12 +82,12 @@ add_action('after_setup_theme', function() {
 //////////////////////////////////////////////////
 
 // Области Меню //
-// add_action('after_setup_theme', function() {
-// 	register_nav_menus([
-// 		'header-menu' => 'Шапка',
-// 		// 'footer-menu' => 'Подвал',
-// 	]);
-// });
+add_action('after_setup_theme', function() {
+	register_nav_menus([
+		'header-menu' => 'Шапка',
+		// 'footer-menu' => 'Подвал',
+	]);
+});
 
 //////////////////////////////////////////////////
 

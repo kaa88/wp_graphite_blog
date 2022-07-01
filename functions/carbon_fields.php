@@ -143,6 +143,7 @@ function add_custom_fields() {
 	// Author section
 		Container::make('post_meta', 'Автор')
 			->where('post_id', '=', 32)
+			->or_where('post_id', '=', 152)
 			->set_priority('core')
 			->add_fields([
 				// Field::make('image', 'author_photo', 'Фото')
