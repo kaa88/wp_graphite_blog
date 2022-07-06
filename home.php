@@ -44,7 +44,7 @@ get_template_part('parts/header');
 			<a class="controls__button controls__button--contact g-button modal-link" href="#modal-contact">
 				<span><?php echo __('Contact', 'wp_graphite_blog') ?></span>
 			</a>
-			<div class="controls__theme" title="Change color theme">
+			<div class="controls__theme" title="<?php echo __('Change color theme', 'wp_graphite_blog') ?>">
 				<span></span>
 			</div>
 

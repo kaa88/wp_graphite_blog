@@ -10,7 +10,7 @@ get_template_part('parts/header');
 			<div class="post__title-image">
 				<div class="post__header">
 					<i class="icon-arrow"></i>
-					<a href="<?php echo home_url() ?>">Back</a>
+					<a href="<?php echo home_url() ?>"><?php _e('Back', 'wp_graphite_blog') ?></a>
 				</div>
 				<?php if (has_post_thumbnail()) {
 					echo '<img src="';

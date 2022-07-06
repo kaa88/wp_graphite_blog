@@ -75,48 +75,18 @@ function check_fields($arr = []) {
 function add_custom_fields() {
 
 	// Custom fields container
-	Container::make('theme_options', 'Custom Fields')
-		->set_page_menu_title('Кастомные поля')
+	Container::make('theme_options', __('Custom Fields', 'wp_graphite_blog'))
+		->set_page_menu_title( __('Custom Fields', 'wp_graphite_blog') )
 		->set_icon('dashicons-align-right')
 
-	// Header tab
-		// ->add_tab('Шапка', [
-		// 	Field::make('image', 'header_logo_img', 'Иконка логотипа')->set_value_type('url'),
-		// 	Field::make('text', 'header_logo_text', 'Текст логотипа'),
-		// ])
-
-	// Footer tab
-		// ->add_tab('Подвал', [
-		// 	Field::make('text', 'footer_address', 'Адрес'),
-		// 	Field::make('text', 'footer_phone_link', 'Телефон - ссылка')->set_width(50)
-		// 		->set_help_text('Формат телефона для ссылки: +79999999999'),
-		// 	Field::make('text', 'footer_phone_text', 'Телефон - отображаемый текст')->set_width(50),
-		// 	Field::make('text', 'footer_email_link', 'Email - ссылка')->set_width(50),
-		// 	Field::make('text', 'footer_email_text', 'Email - отображаемый текст')->set_width(50),
-
-		// 	Field::make('separator', 'separator_footer_socials', 'Соцсети:'),
-		// 	Field::make('complex', 'footer_socials', 'Соцсети')
-		// 		->add_fields([
-		// 			Field::make('select', 'name', 'Выберите')->set_width(50)
-		// 				->set_options([
-		// 					'twitter' => 'Twitter',
-		// 					'facebook' => 'Facebook',
-		// 					'pinterest' => 'Pinterest',
-		// 					'google-plus' => 'Google+'
-		// 				]),
-		// 			Field::make('text', 'link', 'Ссылка')->set_width(50)
-		// 				->set_help_text('Введите адрес полностью, начиная с https://'),
-		// 		]),
-
-		// ])
-
-		->add_tab('Модал - контакт', [
-			Field::make('text', 'modal_header', 'Заголовок'),
-			Field::make( 'complex', 'modal_quick_contacts', __( 'Быстрые контакты' ) )
+		->add_tab(__('Modal-contact', 'wp_graphite_blog'), [
+			Field::make('text', 'modal_header', __('Header (EN)', 'wp_graphite_blog'))->set_width(50),
+			Field::make('text', 'modal_header_ru', __('Header (RU)', 'wp_graphite_blog'))->set_width(50),
+			Field::make( 'complex', 'modal_quick_contacts', __('Quick contacts', 'wp_graphite_blog') )
 			->add_fields([
-				Field::make('text', 'link', 'Ссылка')->set_width(33),
-				Field::make('text', 'text', 'Текст кнопки')->set_width(33),
-				Field::make( 'select', 'icon', __( 'Иконка' ) )
+				Field::make('text', 'link', __('Link', 'wp_graphite_blog'))->set_width(33),
+				Field::make('text', 'text', __('Button text', 'wp_graphite_blog'))->set_width(33),
+				Field::make( 'select', 'icon', __('Icon', 'wp_graphite_blog') )
 				->set_options([
 					'bitrix' => 'Bitrix',
 					'wp' => 'Wordpress',
@@ -127,13 +97,14 @@ function add_custom_fields() {
 				])
 				->set_width(33)
 			]),
-			Field::make('text', 'modal_name_placeholder', 'Замещающий текст - имя')->set_width(50),
-			Field::make('text', 'modal_email_placeholder', 'Замещающий текст - email')->set_width(50),
+			Field::make('text', 'modal_name_placeholder', __('Placeholder - name (EN)', 'wp_graphite_blog'))->set_width(50),
+			Field::make('text', 'modal_name_placeholder_ru', __('Placeholder - name (RU)', 'wp_graphite_blog'))->set_width(50),
+			Field::make('text', 'modal_email_placeholder', __('Placeholder - email', 'wp_graphite_blog')),
 		])
 		// Metrics tab
-		->add_tab('Метрики', [
-			Field::make('header_scripts', 'metrics', 'HTML-код метрик и счетчиков поисковых систем')
-				->set_default_value('<!-- Здесь будут метрики поисковых систем -->')
+		->add_tab(__('Metrics', 'wp_graphite_blog'), [
+			Field::make('header_scripts', 'metrics', __('HTML-code for searchbots', 'wp_graphite_blog'))
+				->set_default_value(__('<!-- Mertics will be here -->', 'wp_graphite_blog'))
 				->set_rows(20)
 		]);
 
@@ -141,28 +112,25 @@ function add_custom_fields() {
 	// Editor fields:
 
 	// Author section
-		Container::make('post_meta', 'Автор')
+		Container::make('post_meta', __('Author', 'wp_graphite_blog'))
 			->where('post_id', '=', 32)
 			->or_where('post_id', '=', 152)
 			->set_priority('core')
 			->add_fields([
-				// Field::make('image', 'author_photo', 'Фото')
-				// 	->set_value_type('url')
-				// 	->set_width(50),
-				Field::make('image', 'author_photo2', 'Фото id')
+				Field::make('image', 'author_photo2', __('Photo id', 'wp_graphite_blog'))
 					->set_width(50),
-				Field::make('text', 'author_title', 'Заголовок'),
-				Field::make('text', 'author_text', 'Текст'),
+				Field::make('text', 'author_title', __('Header', 'wp_graphite_blog')),
+				Field::make('text', 'author_text', __('Text', 'wp_graphite_blog')),
 
-				Field::make( 'file', 'author_cv', 'Кнопка - файл' )
+				Field::make( 'file', 'author_cv', __('Button - file', 'wp_graphite_blog') )
 				->set_value_type( 'url' )
 				->set_width(50),
-				Field::make('text', 'author_button_text', 'Кнопка - текст')
+				Field::make('text', 'author_button_text', __('Button - text', 'wp_graphite_blog'))
 				->set_width(50),
 
-				Field::make( 'complex', 'socials_group', __( 'Группа ссылок на соцсети' ) )
+				Field::make( 'complex', 'socials_group', __( 'Socials group', 'wp_graphite_blog' ) )
 				->add_fields( array(
-					Field::make( 'select', 'socials_select', __( 'Выбор' ) )
+					Field::make( 'select', 'socials_select', __( 'Select', 'wp_graphite_blog' ) )
 					->set_options( array(
 						'bitrix' => 'Bitrix',
 						'wp' => 'Wordpress',
@@ -172,11 +140,11 @@ function add_custom_fields() {
 						'mail' => 'Email',
 					) )
 					->set_width(50),
-					Field::make('text', 'socials_link', 'Ссылка')
+					Field::make('text', 'socials_link', __('Link', 'wp_graphite_blog'))
 					->set_width(50),
 				) ),
-				Field::make('text', 'spoiler_title', 'Заголовок спойлера'),
-				Field::make('textarea', 'spoiler_text', 'Текст спойлера'),
+				Field::make('text', 'spoiler_title', __('Spoiler header', 'wp_graphite_blog')),
+				Field::make('textarea', 'spoiler_text', __('Spoiler text', 'wp_graphite_blog')),
 			]);
 
 } // end add_custom_fields()

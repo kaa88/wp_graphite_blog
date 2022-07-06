@@ -38,51 +38,53 @@ function setupControls() {
 		if (transitionLock.check(pageOptions.themeTimer)) return;
 		pageOptions.setOpt(pageOptions.themePrefix + pageOptions.themeName);
 
-		if (cookies) {
-			if (cookies.cookies_accepted) {
-				if (document.body.classList.contains('theme-dark')) {
-					setCookie({
-						name: 'theme',
-						value: pageOptions.themeName,
-						expires: 365
-					});
+		setTimeout(() => {
+			if (cookies) {
+				if (cookies.cookies_accepted) {
+					if (document.body.classList.contains('theme-dark')) {
+						setCookie({
+							name: 'theme',
+							value: pageOptions.themeName,
+							expires: 365
+						});
+					}
+					else {
+						setCookie({
+							name: 'theme',
+							value: pageOptions.themeName,
+							expires: -1
+						});
+					}
 				}
 				else {
-					setCookie({
-						name: 'theme',
-						value: pageOptions.themeName,
-						expires: -1
-					});
+					if (document.body.classList.contains('theme-dark')) {
+						setCookie({
+							name: 'theme',
+							value: pageOptions.themeName,
+						});
+					}
+					else {
+						setCookie({
+							name: 'theme',
+							value: pageOptions.themeName,
+							expires: -1
+						});
+					}
 				}
 			}
-			else {
-				if (document.body.classList.contains('theme-dark')) {
-					setCookie({
-						name: 'theme',
-						value: pageOptions.themeName,
-					});
-				}
-				else {
-					setCookie({
-						name: 'theme',
-						value: pageOptions.themeName,
-						expires: -1
-					});
-				}
-			}
-		}
+		}, 100);
 	})
 
-	let langBtn = document.querySelector('.controls__lang');
-	if (langBtn) langBtn.addEventListener('click', () => {
-		if (transitionLock.check(1000)) return;
-		pageOptions.setOpt(pageOptions.langPrefix + pageOptions.langName);
-			// setCookie({
-			// 	name: 'lang',
-			// 	value: 'en',
-			// 	expires: 365
-			// });
-		})
+	// let langBtn = document.querySelector('.controls__lang');
+	// if (langBtn) langBtn.addEventListener('click', () => {
+	// 	if (transitionLock.check(1000)) return;
+	// 	pageOptions.setOpt(pageOptions.langPrefix + pageOptions.langName);
+	// 		// setCookie({
+	// 		// 	name: 'lang',
+	// 		// 	value: 'en',
+	// 		// 	expires: 365
+	// 		// });
+	// 	})
 }
 setupControls();
 
@@ -164,7 +166,6 @@ cookieAlert.init = function() {
 			setCookie({
 				name: 'cookies_accepted',
 				value: 'true',
-				path: '/',
 				expires: 365
 			});
 			this.popup.close();

@@ -8,21 +8,25 @@ const mobileSwitchWidth = parseFloat(getComputedStyle(document.body).getProperty
 //////////////////////////////////////////////
 
 // Cookies
-// Example: 
-// setCookie({
-// 		name: '_cookies', // required
-// 		value: 'true', // required
-// 		expires: 30, // expire time in days (can be negative to delete cookie)
-// 		// *any other supported params*
-// 	},
-// 	true // log formatted cookie string in console
-// );
+/* Example: 
+	setCookie(
+		{
+			name: '_cookies', // required
+			value: 'true', // required
+			path: '/ru' // default '/'
+			expires: 30, // expire time in days (can be negative to delete cookie)
+			// *any other supported params*
+		},
+		true // log formatted cookie string in console
+	);
+*/
 
 function setCookie(params = {}, log) {
 	if (!params.name || !params.value) return console.log('Error: Required cookie "name" or "value" is missing.');
 
 	let cookieArr = [];
 	cookieArr.push(encodeURIComponent(params.name) + '=' +  encodeURIComponent(params.value));
+	cookieArr.push('path=' + (params.path ? params.path : '/'));
 
 	if (params.expires) {
 		let d = new Date();
@@ -32,7 +36,7 @@ function setCookie(params = {}, log) {
 
 	let entries = Object.entries(params);
 	for (let i = 0; i < entries.length; i++) {
-		if (entries[i][0] == 'name' || entries[i][0] == 'value' || entries[i][0] == 'expires') continue;
+		if (entries[i][0] == 'name' || entries[i][0] == 'value' || entries[i][0] == 'path' || entries[i][0] == 'expires') continue;
 		cookieArr.push(entries[i][0] + (entries[i][1] ? ('=' + entries[i][1]) : ''));
 	}
 
@@ -79,51 +83,53 @@ function setupControls() {
 		if (transitionLock.check(pageOptions.themeTimer)) return;
 		pageOptions.setOpt(pageOptions.themePrefix + pageOptions.themeName);
 
-		if (cookies) {
-			if (cookies.cookies_accepted) {
-				if (document.body.classList.contains('theme-dark')) {
-					setCookie({
-						name: 'theme',
-						value: pageOptions.themeName,
-						expires: 365
-					});
+		setTimeout(() => {
+			if (cookies) {
+				if (cookies.cookies_accepted) {
+					if (document.body.classList.contains('theme-dark')) {
+						setCookie({
+							name: 'theme',
+							value: pageOptions.themeName,
+							expires: 365
+						});
+					}
+					else {
+						setCookie({
+							name: 'theme',
+							value: pageOptions.themeName,
+							expires: -1
+						});
+					}
 				}
 				else {
-					setCookie({
-						name: 'theme',
-						value: pageOptions.themeName,
-						expires: -1
-					});
+					if (document.body.classList.contains('theme-dark')) {
+						setCookie({
+							name: 'theme',
+							value: pageOptions.themeName,
+						});
+					}
+					else {
+						setCookie({
+							name: 'theme',
+							value: pageOptions.themeName,
+							expires: -1
+						});
+					}
 				}
 			}
-			else {
-				if (document.body.classList.contains('theme-dark')) {
-					setCookie({
-						name: 'theme',
-						value: pageOptions.themeName,
-					});
-				}
-				else {
-					setCookie({
-						name: 'theme',
-						value: pageOptions.themeName,
-						expires: -1
-					});
-				}
-			}
-		}
+		}, 100);
 	})
 
-	let langBtn = document.querySelector('.controls__lang');
-	if (langBtn) langBtn.addEventListener('click', () => {
-		if (transitionLock.check(1000)) return;
-		pageOptions.setOpt(pageOptions.langPrefix + pageOptions.langName);
-			// setCookie({
-			// 	name: 'lang',
-			// 	value: 'en',
-			// 	expires: 365
-			// });
-		})
+	// let langBtn = document.querySelector('.controls__lang');
+	// if (langBtn) langBtn.addEventListener('click', () => {
+	// 	if (transitionLock.check(1000)) return;
+	// 	pageOptions.setOpt(pageOptions.langPrefix + pageOptions.langName);
+	// 		// setCookie({
+	// 		// 	name: 'lang',
+	// 		// 	value: 'en',
+	// 		// 	expires: 365
+	// 		// });
+	// 	})
 }
 setupControls();
 
@@ -810,7 +816,6 @@ cookieAlert.init = function() {
 			setCookie({
 				name: 'cookies_accepted',
 				value: 'true',
-				path: '/',
 				expires: 365
 			});
 			this.popup.close();

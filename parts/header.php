@@ -24,5 +24,3 @@
 			<p><i class="icon-spinner"></i></p>
 		</div>
 	</div>
-
-	<!-- <header class="header"></header> -->

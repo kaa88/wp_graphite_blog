@@ -4,7 +4,12 @@
 			<div class="modal__close-button"><i class="icon-cross"></i></div>
 
 			<form class="contact-form" name="contact-form" action="#">
-				<p class="contact-form__title"><?php echo carbon_get_theme_option('modal_header') ?></p>
+				<p class="contact-form__title">
+					<?php
+						if (get_locale() == 'ru_RU') echo carbon_get_theme_option('modal_header_ru');
+						else echo carbon_get_theme_option('modal_header');
+					?>
+				</p>
 				<div class="contact-form__links">
 
 					<?php 
@@ -19,7 +24,10 @@
 						}
 					?>
 				</div>
-				<input class="contact-form__name _req" type="text" name="name" placeholder="<?php echo carbon_get_theme_option('modal_name_placeholder') ?>">
+				<input class="contact-form__name _req" type="text" name="name" placeholder="<?php
+						if (get_locale() == 'ru_RU') echo carbon_get_theme_option('modal_name_placeholder_ru');
+						else echo carbon_get_theme_option('modal_name_placeholder');
+					?>">
 				<input class="contact-form__email _req" type="text" name="email" placeholder="<?php echo carbon_get_theme_option('modal_email_placeholder') ?>">
 				<div class="form-report"></div>
 				<button class="contact-form__button g-button" type="submit">
